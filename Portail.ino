@@ -51,6 +51,8 @@ void loop() {
       /////////////////////
       // Actions
       stepRun();
+
+      motor.Stop();
       
       /////////////////////
       // Conditions de sortie
@@ -159,6 +161,11 @@ void loop() {
       if(cellOpening.getState() == HIGH && cellOpening.isLoopTrigger()){
         changeStatus(FIRST_START);
       }
+
+      // Si détection obstacle par surintensitée
+      if(ACS1.getValue() >= SAFETY_LIMIT){
+        changeStatus(FIRST_START);
+      }       
       
       // Fin de courses à l'ouverture:
       if(endOpening.getState() == HIGH && endOpening.isLoopTrigger()){
@@ -215,6 +222,11 @@ void loop() {
             
       // Si détection obstacle
       if(cellClosing.getState() == HIGH && cellClosing.isLoopTrigger()){
+        changeStatus(FIRST_START);
+      }
+
+      // Si détection obstacle par surintensitée
+      if(ACS1.getValue() >= SAFETY_LIMIT){
         changeStatus(FIRST_START);
       }
       
@@ -368,6 +380,11 @@ void loop() {
       if(cellOpening.getState() == HIGH && cellOpening.isLoopTrigger()){
         changeStatus(OPENING_EMERGENCY_STOP);
       }
+
+      // Si détection obstacle par surintensitée
+      if(ACS1.getValue() >= SAFETY_LIMIT){
+        changeStatus(OPENING_EMERGENCY_STOP);
+      }
       
       // Fin de courses à l'ouverture:
       if(endOpening.getState() == HIGH && endOpening.isLoopTrigger()){
@@ -446,6 +463,11 @@ void loop() {
       // Conditions de sortie
 
       if(ELAPSED > EMERGENCY_REMOVE_TIME){ 
+        changeStatus(CLOSING_WAIT);
+      }
+
+      // Si détection obstacle par surintensitée
+      if(ACS1.getValue() >= SAFETY_LIMIT){
         changeStatus(CLOSING_WAIT);
       }
       
@@ -597,6 +619,11 @@ void loop() {
       if(cellClosing.getState() == HIGH && cellClosing.isLoopTrigger()){
         changeStatus(CLOSING_EMERGENCY_STOP);
       }
+
+      // Si détection obstacle par surintensitée
+      if(ACS1.getValue() >= SAFETY_LIMIT){
+        changeStatus(CLOSING_EMERGENCY_STOP);
+      }
    
       // Fin de courses à la fermeture:
       if(endClosing.getState() == HIGH && endClosing.isLoopTrigger()){
@@ -675,6 +702,11 @@ void loop() {
       // Conditions de sortie
 
       if(ELAPSED > EMERGENCY_REMOVE_TIME){ 
+        changeStatus(OPENING_WAIT);
+      }
+
+      // Si détection obstacle par surintensitée
+      if(ACS1.getValue() >= SAFETY_LIMIT){
         changeStatus(OPENING_WAIT);
       }
 
