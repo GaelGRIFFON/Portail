@@ -166,6 +166,8 @@ A2
 
 /////////////////
 // ACS (mesure courant)
-  const uint8_t pin_ACS1 = A2;
+  const uint8_t pin_ACS1 = A1;
+  const uint8_t pin_ACS2 = A2;
 
   ACS ACS1;
+  ACS ACS2;

@@ -20,7 +20,7 @@ class Screen
   public:
   // Méthodes
   void Setup();
-  void Display(char * pstatus, byte pposition, byte pmvtTimer, byte pPWM, float pCurrent, float pCurrentMax, bool pButton, bool pOpenEnd, bool pCloseEnd, bool pClosingCellEnable, bool pClosingCell, bool pOpeningCellEnable, bool pOpeningCell);
+  void Display(char * pstatus, byte pposition, byte pmvtTimer, byte pPWM, float pCurrent1, float pCurrent2, bool pButton, bool pOpenEnd, bool pCloseEnd, bool pClosingCellEnable, bool pClosingCell, bool pOpeningCellEnable, bool pOpeningCell);
 };
 
 // Définition des méthodes:
@@ -30,7 +30,7 @@ void Screen::Setup()
   display.clearDisplay();
 }
 
-void Screen::Display(char * pstatus, byte pposition, byte pmvtTimer, byte pPWM, float pCurrent, float pCurrentMax, bool pButton, bool pOpenEnd, bool pCloseEnd, bool pClosingCellEnable, bool pClosingCell, bool pOpeningCellEnable, bool pOpeningCell)
+void Screen::Display(char * pstatus, byte pposition, byte pmvtTimer, byte pPWM, float pCurrent1, float pCurrent2, bool pButton, bool pOpenEnd, bool pCloseEnd, bool pClosingCellEnable, bool pClosingCell, bool pOpeningCellEnable, bool pOpeningCell)
 {
   display.clearDisplay();
   display.setTextColor(SSD1306_WHITE);
@@ -102,9 +102,7 @@ void Screen::Display(char * pstatus, byte pposition, byte pmvtTimer, byte pPWM, 
   // Courant:
   display.setCursor(0, 24);
   // Conversion en Ampère
-  float pCurrentA = pCurrent/1;
-  float pCurrentMaxA = pCurrentMax/1;
-  display.print(String(pCurrentA,3) + "A (" + String(pCurrentMaxA,3) + "A)");
+  display.print(String(pCurrent1,3) + "A " + String(pCurrent2,3) + "A");
 
   // Bouton:
   display.setCursor(100, 24);

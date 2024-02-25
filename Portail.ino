@@ -24,6 +24,7 @@ void setup() {
   cellClosing.Setup(pin_cellClosing, pin_ActiveCellClosing); // Cellule à la fermeture
   cellOpening.Setup(pin_cellOpening, pin_ActiveCellOpening); // Cellule à l'ouverture
   ACS1.Setup(pin_ACS1); // mesure de courant
+  ACS2.Setup(pin_ACS2); // mesure de courant
 }
 
 void loop() {
@@ -35,7 +36,7 @@ void loop() {
   cellOpening.check();
 
   // Actualisation de l'écran
-  screen.Display(statusText[STATUS], POSITION, ELAPSED/1000, SPEED, ACS1.getValue(), 2.123, button1.getState(), endClosing.getState(), endOpening.getState(), cellClosing.isEnable(), cellClosing.getState(), cellOpening.isEnable(), cellOpening.getState());
+  screen.Display(statusText[STATUS], POSITION, ELAPSED/1000, SPEED, ACS1.getValue(), ACS2.getValue(), button1.getState(), endClosing.getState(), endOpening.getState(), cellClosing.isEnable(), cellClosing.getState(), cellOpening.isEnable(), cellOpening.getState());
   
   ////////////////////////
   // Actions selon status:
@@ -163,7 +164,7 @@ void loop() {
       }
 
       // Si détection obstacle par surintensitée
-      if(ACS1.getValue() >= SAFETY_LIMIT){
+      if(max(ACS1.getValue(), ACS2.getValue()) >= SAFETY_LIMIT){
         changeStatus(FIRST_START);
       }       
       
@@ -226,7 +227,7 @@ void loop() {
       }
 
       // Si détection obstacle par surintensitée
-      if(ACS1.getValue() >= SAFETY_LIMIT){
+      if(max(ACS1.getValue(), ACS2.getValue()) >= SAFETY_LIMIT){
         changeStatus(FIRST_START);
       }
       
@@ -382,7 +383,7 @@ void loop() {
       }
 
       // Si détection obstacle par surintensitée
-      if(ACS1.getValue() >= SAFETY_LIMIT){
+      if(max(ACS1.getValue(), ACS2.getValue()) >= SAFETY_LIMIT){
         changeStatus(OPENING_EMERGENCY_STOP);
       }
       
@@ -467,7 +468,7 @@ void loop() {
       }
 
       // Si détection obstacle par surintensitée
-      if(ACS1.getValue() >= SAFETY_LIMIT){
+      if(max(ACS1.getValue(), ACS2.getValue()) >= SAFETY_LIMIT){
         changeStatus(CLOSING_WAIT);
       }
       
@@ -621,7 +622,7 @@ void loop() {
       }
 
       // Si détection obstacle par surintensitée
-      if(ACS1.getValue() >= SAFETY_LIMIT){
+      if(max(ACS1.getValue(), ACS2.getValue()) >= SAFETY_LIMIT){
         changeStatus(CLOSING_EMERGENCY_STOP);
       }
    
@@ -706,7 +707,7 @@ void loop() {
       }
 
       // Si détection obstacle par surintensitée
-      if(ACS1.getValue() >= SAFETY_LIMIT){
+      if(max(ACS1.getValue(), ACS2.getValue()) >= SAFETY_LIMIT){
         changeStatus(OPENING_WAIT);
       }
 
