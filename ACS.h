@@ -14,7 +14,7 @@ class ACS
   public:
   // Méthodes
   void Setup(byte pACS);
-  float getValue();
+  float getValue(bool getAbs = true);
 };
 
 // Définition des méthodes:
@@ -27,7 +27,7 @@ void ACS::Setup(byte pACS)
 }
 
 // Lire et moyenner
-float ACS::getValue() {
+float ACS::getValue(bool getAbs = true) {
   const byte SAMPLE = 10;   // num of readings
   int ACS = 0;
   for( uint8_t i = 0; i < SAMPLE; i++ ){
@@ -38,5 +38,5 @@ float ACS::getValue() {
   float voltage = mesure*5/1023.0;
   float lastValue = (voltage-2.5)/(30/2.5);
 
-  return  lastValue;
+  return getAbs ? abs(lastValue) : lastValue;
 }
