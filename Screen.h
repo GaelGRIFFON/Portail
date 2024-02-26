@@ -20,7 +20,7 @@ class Screen
   public:
   // Méthodes
   void Setup();
-  void Display(char * pstatus, byte pposition, byte pmvtTimer, byte pPWM, float pCurrent1, float pCurrent2, bool pButton, bool pOpenEnd, bool pCloseEnd, bool pClosingCellEnable, bool pClosingCell, bool pOpeningCellEnable, bool pOpeningCell);
+  void Display(char * pstatus, byte pposition, byte pmvtTimer, byte pPWM, float pCurrent1, float pCurrent2, bool pButton, bool pOpenEnd, bool pCloseEnd, bool pClosingCellEnable, bool pClosingCell, bool pOpeningCellEnable, bool pOpeningCell, bool pFlash);
 };
 
 // Définition des méthodes:
@@ -30,7 +30,7 @@ void Screen::Setup()
   display.clearDisplay();
 }
 
-void Screen::Display(char * pstatus, byte pposition, byte pmvtTimer, byte pPWM, float pCurrent1, float pCurrent2, bool pButton, bool pOpenEnd, bool pCloseEnd, bool pClosingCellEnable, bool pClosingCell, bool pOpeningCellEnable, bool pOpeningCell)
+void Screen::Display(char * pstatus, byte pposition, byte pmvtTimer, byte pPWM, float pCurrent1, float pCurrent2, bool pButton, bool pOpenEnd, bool pCloseEnd, bool pClosingCellEnable, bool pClosingCell, bool pOpeningCellEnable, bool pOpeningCell, bool pFlash)
 {
   display.clearDisplay();
   display.setTextColor(SSD1306_WHITE);
@@ -83,8 +83,25 @@ void Screen::Display(char * pstatus, byte pposition, byte pmvtTimer, byte pPWM, 
   if(pClosingCell){
     display.fillCircle(18, 13, 2, SSD1306_WHITE); 
   }
-  
-  
+
+  // Flash
+  if(pFlash){
+    display.fillCircle(5, 28, 2, SSD1306_WHITE); 
+
+    display.drawPixel(1, 28, SSD1306_WHITE);
+    display.drawPixel(9, 28, SSD1306_WHITE);
+    display.drawPixel(5, 24, SSD1306_WHITE);
+    display.drawPixel(5, 31, SSD1306_WHITE);
+    
+    display.drawPixel(2, 24, SSD1306_WHITE);
+    display.drawPixel(2, 31, SSD1306_WHITE);
+
+    display.drawPixel(8, 24, SSD1306_WHITE);
+    display.drawPixel(8, 31, SSD1306_WHITE);
+  }else{
+    display.drawCircle(5, 28, 2, SSD1306_WHITE); 
+  }
+    
   // Cellule Ouverture
   if(pOpeningCellEnable){
     display.fillRect(74, 11, 3, 5, SSD1306_WHITE);
@@ -100,7 +117,7 @@ void Screen::Display(char * pstatus, byte pposition, byte pmvtTimer, byte pPWM, 
   }
     
   // Courant:
-  display.setCursor(0, 24);
+  display.setCursor(18, 24);
   // Conversion en Ampère
   display.print(String(pCurrent1,3) + "A " + String(pCurrent2,3) + "A");
 

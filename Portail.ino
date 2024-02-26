@@ -25,6 +25,7 @@ void setup() {
   cellOpening.Setup(pin_cellOpening, pin_ActiveCellOpening); // Cellule à l'ouverture
   ACS1.Setup(pin_ACS1); // mesure de courant
   ACS2.Setup(pin_ACS2); // mesure de courant
+  flash.Setup(pin_Flash, 500); // Flash
 }
 
 void loop() {
@@ -36,7 +37,20 @@ void loop() {
   cellOpening.check();
 
   // Actualisation de l'écran
-  screen.Display(statusText[STATUS], POSITION, ELAPSED/1000, SPEED, ACS1.getValue(), ACS2.getValue(), button1.getState(), endClosing.getState(), endOpening.getState(), cellClosing.isEnable(), cellClosing.getState(), cellOpening.isEnable(), cellOpening.getState());
+  screen.Display( statusText[STATUS], 
+                  POSITION, 
+                  ELAPSED/1000, 
+                  SPEED, 
+                  ACS1.getValue(), 
+                  ACS2.getValue(), 
+                  button1.getState(), 
+                  endClosing.getState(), 
+                  endOpening.getState(), 
+                  cellClosing.isEnable(), 
+                  cellClosing.getState(), 
+                  cellOpening.isEnable(), 
+                  cellOpening.getState(),
+                  flash.getState());
   
   ////////////////////////
   // Actions selon status:
@@ -90,7 +104,7 @@ void loop() {
         stepRun();
 
         // Allumage du flash
-        // flash.on();
+        flash.On();
 
         // Position fixée à 50 pendant le réglage en attendant d'atteindre la fin de course
         POSITION = 50;
@@ -140,6 +154,9 @@ void loop() {
       /////////////////////
       // Actions
         stepRun();
+
+        // Allumage du flash
+        flash.On();
 
         // Etant donné qu'on ne connait pas la durée, on ne peut pas savoir la position
         POSITION = 0; 
@@ -204,6 +221,9 @@ void loop() {
       // Actions
         stepRun();
 
+        // Allumage du flash
+        flash.On();
+
         // Etant donné qu'on ne connait pas la durée, on ne peut pas savoir la position, mais on sait qu'on part de 100
         POSITION = 100; 
 
@@ -266,7 +286,7 @@ void loop() {
         motor.Stop();
                 
         // Désactivation du Flash
-        //flash.Off();
+        flash.Off();
       
       /////////////////////
       // Conditions de sortie
@@ -297,8 +317,8 @@ void loop() {
       // Actions
       stepRun();
 
-        // Activation du Flash
-        //flash.On();
+        // Allumage du flash
+        flash.On();
       
       /////////////////////
       // Conditions de sortie
@@ -309,13 +329,13 @@ void loop() {
         changeStatus(OPENING_WAIT);
       }
 
-      // Attente de 1 sec de flash avant de démarrer le moteur (OPENING) ET qu'il n'y ai pas d'obastacle
-      if(ELAPSED > 1000 && cellOpening.getState() == LOW){ 
+      // Attente de x sec de flash avant de démarrer le moteur (OPENING) ET qu'il n'y ai pas d'obastacle
+      if(ELAPSED > WAIT_BEFORE_START && cellOpening.getState() == LOW){ 
         changeStatus(OPENING);
       }
 
-      // Attente de 10 sec de flash avant d'abandonner (présence d'obstacle persistant)
-      if(ELAPSED > 10000){ 
+      // Attente de 15 sec de flash avant d'abandonner (présence d'obstacle persistant)
+      if(ELAPSED > 15000){ 
         cellOpening.Disable();
         changeStatus(OPENING_WAIT);
       }
@@ -343,6 +363,9 @@ void loop() {
       /////////////////////
       // Actions
         stepRun();
+
+        // Allumage du flash
+        flash.On();
 
         // Mise à jour de la position théorique
         POSITION = min(relativeELAPSED * 100 / OPENING_TIME, 100); 
@@ -414,6 +437,9 @@ void loop() {
       // Actions
       stepRun();
 
+        // Allumage du flash
+        flash.On();
+
         // Moteur à l'arrêt
         motor.Stop();
               
@@ -451,6 +477,9 @@ void loop() {
       /////////////////////
       // Actions
         stepRun();
+
+        // Allumage du flash
+        flash.On();
 
         // Mise à jour de la position théorique
         POSITION = max(100 - (relativeELAPSED * 100 / CLOSING_TIME), 0);
@@ -503,7 +532,7 @@ void loop() {
         motor.Stop();
               
         // Désactivation du Flash
-        //flash.Off();
+        flash.Off();
 
 
       /////////////////////
@@ -535,8 +564,8 @@ void loop() {
       // Actions
       stepRun();
 
-        // Activation du Flash
-        // flash.on();
+        // Allumage du flash
+        flash.On();
      
       /////////////////////
       // Conditions de sortie
@@ -547,13 +576,13 @@ void loop() {
         changeStatus(CLOSING_WAIT);
       }
 
-      // Attente de 1 sec de flash avant de démarrer le moteur (CLOSING) ET qu'il n'y ai pas d'obastacle
-      if(ELAPSED > 1000 && cellClosing.getState() == LOW){ 
+      // Attente de x sec de flash avant de démarrer le moteur (CLOSING) ET qu'il n'y ai pas d'obastacle
+      if(ELAPSED > WAIT_BEFORE_START && cellClosing.getState() == LOW){ 
         changeStatus(CLOSING);
       }
 
-      // Attente de 10 sec de flash avant d'abandonner (présence d'obstacle persistant)
-      if(ELAPSED > 10000){ 
+      // Attente de 15 sec de flash avant d'abandonner (présence d'obstacle persistant)
+      if(ELAPSED > 15000){ 
         cellClosing.Disable();
         changeStatus(CLOSING_WAIT);
       }
@@ -582,6 +611,9 @@ void loop() {
       /////////////////////
       // Actions
         stepRun();
+
+        // Allumage du flash
+        flash.On();
       
         // Mise à jour de la position théorique
         POSITION = max(100 - (relativeELAPSED * 100 / CLOSING_TIME), 0); 
@@ -653,6 +685,9 @@ void loop() {
       // Actions
       stepRun();
 
+        // Allumage du flash
+        flash.On();
+
         // Moteur à l'arrêt
         motor.Stop();
               
@@ -690,6 +725,9 @@ void loop() {
       /////////////////////
       // Actions
         stepRun();
+
+        // Allumage du flash
+        flash.On();
 
         // Mise à jour de la position théorique
         POSITION = min(relativeELAPSED * 100 / OPENING_TIME, 100); 

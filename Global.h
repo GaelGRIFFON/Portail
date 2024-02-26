@@ -3,6 +3,7 @@
 #include "CelluleControler.h"
 #include "ACS.h"
 #include "Screen.h"
+#include "Flash.h"
 
 /*
 Déclaration des valeurs globales
@@ -31,6 +32,9 @@ Cellules:
 
 ACS:
 A2
+
+Flash:
+A6
 */
 
 /////////////////
@@ -90,6 +94,7 @@ A2
   long ACCELERATE_TIME = 2000; // Durée de l'accélération
   long EMERGENCY_REMOVE_TIME = 1500; // Durée de mouvement inverse en cas d'EMERGENCY_STOP
   long TIMEOUT = 4000;  // Durée d'attente de l'atteinte de la fin de course
+  long WAIT_BEFORE_START = 3000; // Durée d'attente avant de démarrer le mouvement (étapes OPENING_INIT et CLOSING_INIT)
 
   // Timing des étapes
   long ELAPSED = 0; // Durée écoulée sur l'action en cours
@@ -117,7 +122,7 @@ A2
 
 /////////////////
 // SECURITY
-  byte SAFETY_LIMIT = 10; // Surcharge max acceptable
+  float SAFETY_LIMIT = 2.900; // Surcharge max acceptable (en A)
 
 /////////////////
 // Ecran
@@ -142,6 +147,13 @@ A2
   const uint8_t pin_Button1 = 2; // D2 Interrupt
 
   Input button1;
+
+
+/////////////////
+// Flash
+  const uint8_t pin_Flash = A6; // A6 (as DigitalOutput)
+
+  Flash flash;
 
 /////////////////
 // Cellules
